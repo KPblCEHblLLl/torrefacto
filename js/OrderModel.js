@@ -6,8 +6,6 @@
 function OrderModel() {
 	/** @type {string} */
 	this.username = "";
-	/** @type {string[]} */
-	this._allUsers = [];
 	/** @type {OrderItem[]} */
 	this.itemsList = [];
 	/** @type {CoffeeModel[]} */
@@ -204,9 +202,21 @@ OrderModel.prototype.getRequestData = function() {
 	return data;
 };
 
+/**
+ * @class
+ * @extends {OrderModel}
+ */
+function GlobalOrderModel() {
+	GlobalOrderModel.superclass.apply(this);
+	/** @type {OrderModel} */
+	this.allOrders = [];
+}
+extend(GlobalOrderModel, OrderModel);
+
+
 /** @param {OrderModel} order */
-OrderModel.prototype.addOrder = function(order) {
-	this._allUsers.push(order.username);
+GlobalOrderModel.prototype.addOrder = function(order) {
+	this.allOrders.push(order);
 
 	for (var i = 0; i < order.itemsList.length; ++i) {
 		var otherItem = order.itemsList[i];

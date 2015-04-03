@@ -36,7 +36,7 @@ $(function () {
 			substractQuantity(this);
 		});
 
-	$.getJSON("data.json").done(function (list) {
+	$.getJSON("./data/coffee.json").done(function (list) {
 		order.applyCoffeeList(list);
 	});
 });
