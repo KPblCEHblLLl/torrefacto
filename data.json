@@ -1,0 +1,382 @@
+[
+	{
+		"id": "bx_2587744191_18675",
+		"name": "Муссонный Малабар",
+		"subName": "",
+		"price": {
+			"150": 257,
+			"450": 705
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/monsooned-malabar/"
+	},
+	{
+		"id": "bx_2587744191_18681",
+		"name": "Уотер Декаф",
+		"subName": "",
+		"price": {
+			"150": 371,
+			"450": 1047
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/decaf/"
+	},
+	{
+		"id": "bx_2587744191_18682",
+		"name": "Паганини",
+		"subName": "",
+		"price": {
+			"150": 228,
+			"450": 618
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/paganini/"
+	},
+	{
+		"id": "bx_2587744191_20931",
+		"name": "Куба",
+		"subName": "Альтура",
+		"price": {
+			"150": 284,
+			"450": 789
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/cuba-altura/"
+	},
+	{
+		"id": "bx_2587744191_18692",
+		"name": "Мексика",
+		"subName": "Гваделупе Заху",
+		"price": {
+			"150": 243,
+			"450": 660
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/mexico/"
+	},
+	{
+		"id": "bx_2587744191_18698",
+		"name": "Гондурас",
+		"subName": "Сан-Маркос",
+		"price": {
+			"150": 222,
+			"450": 599
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/honduras-san-marcos/"
+	},
+	{
+		"id": "bx_2587744191_18699",
+		"name": "Вьетнам",
+		"subName": "Далат",
+		"price": {
+			"150": 198,
+			"450": 528
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/vietnam-dalat/"
+	},
+	{
+		"id": "bx_2587744191_18700",
+		"name": "Эфиопия",
+		"subName": "Харрар",
+		"price": {
+			"150": 304,
+			"450": 846
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/ethiopia-harrar/"
+	},
+	{
+		"id": "bx_2587744191_18710",
+		"name": "Карузо",
+		"subName": "",
+		"price": {
+			"150": 248,
+			"450": 679
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/caruso/"
+	},
+	{
+		"id": "bx_2587744191_18711",
+		"name": "Тосканини",
+		"subName": "",
+		"price": {
+			"150": 265,
+			"450": 728
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/toscanini/"
+	},
+	{
+		"id": "bx_2587744191_21686",
+		"name": "Непал",
+		"subName": "Маунт Эверест",
+		"price": {
+			"150": 428,
+			"450": 1224
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/nepal-mount-everest/"
+	},
+	{
+		"id": "bx_2587744191_21831",
+		"name": "Гватемала",
+		"subName": "Фрайханес Идолия",
+		"price": {
+			"150": 342,
+			"450": 959
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/guatemala-fraijanes-idolia/"
+	},
+	{
+		"id": "bx_2587744191_23573",
+		"name": "Бразилия",
+		"subName": "Сантос",
+		"price": {
+			"150": 197,
+			"450": 525
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/brazil-santos/"
+	},
+	{
+		"id": "bx_2587744191_23568",
+		"name": "Перу",
+		"subName": "",
+		"price": {
+			"150": 210,
+			"450": 563
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/peru/"
+	},
+	{
+		"id": "bx_2587744191_23750",
+		"name": "Эфиопия",
+		"subName": "Сидамо 4",
+		"price": {
+			"150": 218,
+			"450": 586
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/ethiopia-sidamo-4/"
+	},
+	{
+		"id": "bx_2587744191_18687",
+		"name": "Никарагуа",
+		"subName": "пакамара Ла-Бендисьон",
+		"price": {
+			"150": 250,
+			"450": 703
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/nicaragua-pacamara/"
+	},
+	{
+		"id": "bx_2587744191_18683",
+		"name": "Доницетти",
+		"subName": "",
+		"price": {
+			"150": 253,
+			"450": 695
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/donizetti/"
+	},
+	{
+		"id": "bx_2587744191_18693",
+		"name": "Папуа-Новая Гвинея",
+		"subName": "Сигри",
+		"price": {
+			"150": 286,
+			"450": 792
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/papua-new-guinea-sigri/"
+	},
+	{
+		"id": "bx_2587744191_21692",
+		"name": "Бурунди",
+		"subName": "Киримиро",
+		"price": {
+			"150": 270,
+			"450": 743
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/burundi-kirimiro/"
+	},
+	{
+		"id": "bx_2587744191_23217",
+		"name": "Кабо-Верде",
+		"subName": "мытый",
+		"price": {
+			"150": 861,
+			"450": 2515
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/kabo-verde-washed/"
+	},
+	{
+		"id": "bx_2587744191_23222",
+		"name": "Эфиопия",
+		"subName": "Гуджи Савана",
+		"price": {
+			"150": 453,
+			"450": 1293
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/ethiopia-guji-sawana/"
+	},
+	{
+		"id": "bx_2587744191_23247",
+		"name": "Колумбия",
+		"subName": "Антьокия Ла-Хойерия",
+		"price": {
+			"150": 336,
+			"450": 943
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/colombia-antioquia-la-joyeria/"
+	},
+	{
+		"id": "bx_2587744191_24454",
+		"name": "Эль-Сальвадор",
+		"subName": "финка Ла-Фани",
+		"price": {
+			"150": 439,
+			"450": 1252
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/el-salvador-finca-la-fany/"
+	},
+	{
+		"id": "bx_2587744191_24449",
+		"name": "Гватемала",
+		"subName": "Антигуа Санта-Клара",
+		"price": {
+			"150": 456,
+			"450": 1303
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/guatemala-antigua-santa-clara/"
+	},
+	{
+		"id": "bx_2587744191_24166",
+		"name": "Панама",
+		"subName": "Бокете Каса Руис",
+		"price": {
+			"150": 299,
+			"450": 831
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/panama-boquete-casa-ruiz/"
+	},
+	{
+		"id": "bx_2587744191_18697",
+		"name": "Йемен",
+		"subName": "Матари",
+		"price": {
+			"150": 552,
+			"450": 1590
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/yemen-mocha-matari/"
+	},
+	{
+		"id": "bx_2587744191_18689",
+		"name": "Уганда",
+		"subName": "Сипи Фоллз",
+		"price": {
+			"150": 264,
+			"450": 727
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/uganda-sipi-falls/"
+	},
+	{
+		"id": "bx_2587744191_18705",
+		"name": "Коста-Рика",
+		"subName": "Гейша Уайни",
+		"price": {
+			"150": 910,
+			"450": 2664
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/costa-rica-geisha-winey/"
+	},
+	{
+		"id": "bx_2587744191_20943",
+		"name": "Йемен",
+		"subName": "Харази",
+		"price": {
+			"150": 541,
+			"450": 1557
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/yemen-harazi/"
+	},
+	{
+		"id": "bx_2587744191_21836",
+		"name": "Гватемала",
+		"subName": "маракатурра Эль-Сокорро",
+		"price": {
+			"150": 489,
+			"450": 1399
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/guatemala-maracaturra-el-soccoro/"
+	},
+	{
+		"id": "bx_2587744191_22998",
+		"name": "Эфиопия",
+		"subName": "Иргачеффе Нотс фэмили",
+		"price": {
+			"150": 363,
+			"450": 1026
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/ethiopia-yrgacheffe-knots/"
+	},
+	{
+		"id": "bx_2587744191_23242",
+		"name": "Колумбия",
+		"subName": "Уила Гуакакайо",
+		"price": {
+			"150": 349,
+			"450": 982
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/colombia-huila-guacacayo/"
+	},
+	{
+		"id": "bx_2587744191_23237",
+		"name": "Кения",
+		"subName": "Ньери Кабируини",
+		"price": {
+			"150": 366,
+			"450": 1032
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/kenya-nyeri-kabiruini/"
+	},
+	{
+		"id": "bx_2587744191_23456",
+		"name": "Кения",
+		"subName": "Ньери Камоко",
+		"price": {
+			"150": 371,
+			"450": 1045
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/kenya-nyeri-kamoko/"
+	},
+	{
+		"id": "bx_2587744191_24160",
+		"name": "Эфиопия",
+		"subName": "Сидамо Шилчо",
+		"price": {
+			"150": 246,
+			"450": 674
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/ethiopia-sidamo-shilcho/"
+	},
+	{
+		"id": "bx_2587744191_18674",
+		"name": "Уганда",
+		"subName": "Робуста",
+		"price": {
+			"150": 161,
+			"450": 415
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/uganda-robusta/"
+	},
+	{
+		"id": "bx_2587744191_18686",
+		"name": "Вьетнам",
+		"subName": "робуста Голубой дракон",
+		"price": {
+			"150": 161,
+			"450": 415
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/vietnam-robusta/"
+	},
+	{
+		"id": "bx_2587744191_18685",
+		"name": "Танзания",
+		"subName": "робуста Карагве",
+		"price": {
+			"150": 207,
+			"450": 552
+		},
+		"link": "http://www.torrefacto.ru/catalog/roasted/tanzania-robusta/"
+	}
+]

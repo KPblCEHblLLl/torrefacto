@@ -1,0 +1,13 @@
+.price {
+	text-align: right;
+}
+
+.quantity .add {
+	margin-left: 5px;
+}
+
+.quantity .substract {
+	margin-left: 5px;
+	background-color: #EC5A5F;
+}
+
