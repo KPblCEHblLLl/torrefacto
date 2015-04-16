@@ -11,3 +11,43 @@
 	background-color: #EC5A5F;
 }
 
+#opinion {
+	position: absolute;
+	top: 0;
+	left: 20px;
+	width: 400px;
+	box-shadow: 2px 2px 20px gray;
+	display: none;
+	background-color: #ffffff;
+	z-index: 1;
+	outline: 1px solid gray;
+}
+
+#opinion textarea {
+	width: 100%;
+	box-sizing: border-box;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	height: 200px;
+}
+
+#opinion input {
+	box-sizing: border-box;
+	width: 50%;
+}
+
+.opinion-holder {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+	border-radius: 50%;
+	background-color: green;
+	margin-right: 5px;
+	opacity: 0.2;
+}
+
+.opinion-holder.has-opinion {
+	opacity: 1;
+}

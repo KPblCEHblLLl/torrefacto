@@ -2,11 +2,14 @@
  * Created by d.lubimov on 03.04.2015.
  */
 
+/** @type {OrderModel} */
 var order = new OrderModel();
+/** @type {jQuery} */
 var table;
 
 order.on("coffee-list-changed", drawCoffeeTable);
 order.on("items-list-changed", drawCoffeeTable);
+order.on("opinions-list-changed", applyOpinions);
 
 
 $(function () {
@@ -28,12 +31,23 @@ $(function () {
 		$.post(url, data);
 	});
 
+	$("#opinion")
+		.on("click", ".cancel", function() {
+			$("#opinion").hide();
+		})
+		.on("click", ".save", function() {
+			saveOpinion();
+		});
+
 	table
 		.on("click", ".quantity .add", function () {
 			addQuantity(this);
 		})
 		.on("click", ".quantity .substract", function () {
 			substractQuantity(this);
+		})
+		.on("click", ".opinion-holder", function () {
+			showEditOpinion(this);
 		});
 
 	$.getJSON("./data/coffee.json").done(function (list) {
@@ -49,15 +63,19 @@ function drawCoffeeTable() {
 	tbody.html("");
 
 	for (var i = 0; i < list.length; i++) {
-		var row = $("<tr/>");
-
+		/** @type {CoffeeModel} */
 		var coffee = list[i];
+
+		var row = $("<tr/>");
+		row.data("coffee-id", coffee.id);
+		row.attr("id", "row_" + coffee.id);
+
 		var name = coffee.name;
 		if (coffee.subName) {
 			name += " (" + coffee.subName + ")";
 		}
 
-		row.append("<td><a href='" + coffee.link + "'>" + name + "</a></td>");
+		row.append("<td><span class='opinion-holder'></span><a href='" + coffee.link + "'>" + name + "</a></td>");
 		for (var j = 0; j < order.weightsList.length; j++) {
 			var weight = order.weightsList[j];
 			row.append("<td class='price'>" + coffee.price[weight] + " р.</td>");
@@ -66,6 +84,7 @@ function drawCoffeeTable() {
 		tbody.append(row);
 	}
 	setTotal();
+	applyOpinions();
 }
 
 /**
@@ -130,4 +149,55 @@ function redrawQuantity(item) {
 
 function setTotal() {
 	$("#total").text(order.getTotal());
+}
+
+function applyOpinions() {
+	var opinionsHash = order.getOpinionsGroupedByCoffee();
+	for (var coffeId in opinionsHash) {
+		if (!opinionsHash.hasOwnProperty(coffeId)) {
+			continue;
+		}
+		var list = opinionsHash[coffeId];
+		var opinionText = "";
+		for (var i = 0; i < list.length; ++i) {
+			var opinion = list[i];
+			if (opinionText) {
+				opinionText += "\n\n";
+			}
+			opinionText += opinion.user + ":\n";
+			opinionText += opinion.text;
+		}
+
+		var row = table.find("#row_" + coffeId);
+		var opinionHolder = row.find(".opinion-holder");
+		opinionHolder.prop("title", opinionText);
+		opinionHolder.toggleClass("has-opinion", !!opinionText);
+	}
+}
+
+/** @param {HTMLElement} opinionHolder */
+function showEditOpinion(opinionHolder) {
+	var row = $(opinionHolder).parents("tr");
+	var coffee = order.getCoffee(row.data("coffee-id"));
+	var opinion = order.getUserOpinion(coffee);
+	var text = opinion ? opinion.text : "";
+
+	var popup = $("#opinion");
+	popup.data("coffee", coffee);
+	var textarea = popup.find(".opinion-input");
+	textarea.val(text);
+
+	popup.css("top", row.offset().top);
+	popup.show();
+}
+
+function saveOpinion() {
+	var popup = $("#opinion");
+	var coffee = popup.data("coffee");
+
+	var textarea = popup.find(".opinion-input");
+	var text = textarea.val();
+
+	order.saveUserOpinion(coffee, text);
+	popup.hide();
 }

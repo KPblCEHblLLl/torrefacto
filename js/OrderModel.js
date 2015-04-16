@@ -10,6 +10,8 @@ function OrderModel() {
 	this.itemsList = [];
 	/** @type {CoffeeModel[]} */
 	this.coffeeList = [];
+	/** @type {CoffeeOpinion[]} */
+	this._opinionsList = [];
 
 	this._eventsTarget = $(this);
 }
@@ -42,6 +44,7 @@ OrderModel.prototype.applyCoffeeList = function(list) {
 		coffee.name = coffeeData["name"];
 		coffee.subName = coffeeData["subName"];
 		coffee.price = coffeeData["price"];
+		coffee.link = coffeeData["link"];
 		return coffee;
 	});
 
@@ -58,6 +61,11 @@ OrderModel.prototype.applyCoffeeList = function(list) {
 	for (var i = 0; i < this.itemsList.length; ++i) {
 		var item = this.itemsList[i];
 		item.coffee = this.getCoffee(item.id);
+	}
+
+	for (var j = 0; j < this._opinionsList.length; ++j) {
+		var opinion = this._opinionsList[j];
+		opinion.coffee = this.getCoffee(opinion.coffeeId);
 	}
 
 	this.fire("coffee-list-changed", this.coffeeList);
@@ -139,10 +147,24 @@ OrderModel.prototype.loadFromStorage = function() {
 		var itemData = list[i];
 		var item = new OrderItem();
 		item.id = itemData["id"];
+		item.coffee = this.getCoffee(item.id);
 		item.quantity = itemData["quantity"];
 		item.weight = itemData["weight"];
 		this.itemsList.push(item);
 	}
+
+	var opinionsDataStr = localStorage.getItem("opinions") || "[]";
+	var opinionsData = JSON.parse(opinionsDataStr);
+	for (var j = 0; j < opinionsData.length; ++j) {
+		var opinionData = opinionsData[j];
+		var opinion = new CoffeeOpinion();
+		opinion.text = opinionData["text"];
+		opinion.coffeeId = opinionData["coffeeId"];
+		opinion.coffee = this.getCoffee(opinion.coffeeId);
+		opinion.user = opinionData["user"];
+		this._opinionsList.push(opinion);
+	}
+
 	this.fire("load");
 };
 
@@ -161,6 +183,17 @@ OrderModel.prototype.saveToStorage = function() {
 	}
 
 	localStorage.setItem("order", JSON.stringify(data));
+
+
+	var opinionsData = this.getAllUserOpinions().map(function(/**CoffeeOpinion*/opinion) {
+		return {
+			"user": opinion.user,
+			"coffeeId": opinion.coffee.id,
+			"text": opinion.text,
+		};
+	});
+
+	localStorage.setItem("opinions", JSON.stringify(opinionsData));
 };
 
 /** @returns {number} */
@@ -203,6 +236,106 @@ OrderModel.prototype.getRequestData = function() {
 };
 
 /**
+ * @param {string} [username]
+ */
+OrderModel.prototype.getAllUserOpinions = function(username) {
+	username = username || this.username;
+	var list = this._opinionsList.filter(function(/**CoffeeOpinion*/opinion) {
+		return opinion.user == username;
+	});
+	return list;
+};
+
+/**
+ * @param {CoffeeModel} [coffee]
+ * @param {*} [hash]
+ * @returns {*|CoffeeOpinion[][]}
+ */
+OrderModel.prototype.getOpinionsGroupedByCoffee = function(coffee, hash) {
+	hash = hash || {};
+	var list;
+	if (coffee) {
+		list = this._getOpinionsByCoffee(coffee);
+		hash[coffee.id] = list;
+	} else {
+		for (var i = 0; i < this.coffeeList.length; ++i) {
+			coffee = this.coffeeList[i];
+			hash = this.getOpinionsGroupedByCoffee(coffee, hash);
+		}
+	}
+
+	return hash;
+};
+
+/**
+ * @param {CoffeeModel} [coffee]
+ * @returns {CoffeeOpinion[]}
+ */
+OrderModel.prototype._getOpinionsByCoffee = function(coffee) {
+	var list = this._opinionsList.filter(function(/**CoffeeOpinion*/opinion) {
+		return opinion.coffee == coffee;
+	});
+
+	return list;
+};
+
+/**
+ * @param {CoffeeModel} coffee
+ * @param {string} [username]
+ * @returns {CoffeeOpinion}
+ */
+OrderModel.prototype.getUserOpinion = function(coffee, username) {
+	username = username || this.username;
+	var opinionsList = this._getOpinionsByCoffee(coffee);
+	for (var i = 0; i < opinionsList.length; ++i) {
+		var opinion = opinionsList[i];
+		if (opinion.user == username) {
+			return opinion;
+		}
+	}
+
+	return null;
+};
+
+/**
+ * @param {CoffeeModel} coffee
+ * @param {string} text
+ * @param {string} [username]
+ */
+OrderModel.prototype.saveUserOpinion = function(coffee, text, username) {
+	username = username || this.username;
+	if (!text) {
+		this.deleteOpinion(coffee, username);
+	} else {
+		var opinion = this.getUserOpinion(coffee, username);
+		if (!opinion) {
+			opinion = new CoffeeOpinion();
+			opinion.coffee = coffee;
+			opinion.user = username;
+			this._opinionsList.push(opinion);
+		}
+		opinion.text = text;
+		this.saveToStorage();
+		this.fire("opinions-list-changed");
+	}
+};
+
+/**
+ * @param {CoffeeModel} coffee
+ * @param {string} [username]
+ */
+OrderModel.prototype.deleteOpinion = function(coffee, username) {
+	username = username || this.username;
+	var opinion = this.getUserOpinion(coffee, username);
+	if (!opinion) {
+		return;
+	}
+	this._opinionsList.splice(this._opinionsList.indexOf(opinion), 1);
+	this.saveToStorage();
+	this.fire("opinions-list-changed");
+};
+
+/**
  * @class
  * @extends {OrderModel}
  */
@@ -242,6 +375,8 @@ function CoffeeModel() {
 	this.subName = "";
 	/** @type {number[]} */
 	this.price = "";
+	/** @type {number[]} */
+	this.link = "";
 }
 
 /** @class */
@@ -266,3 +401,15 @@ OrderItem.prototype.clone = function() {
 
 	return clone;
 };
+
+/** @class */
+function CoffeeOpinion() {
+	/** @type {string} */
+	this.user = "";
+	/** @type {string} */
+	this.coffeeId = "";
+	/** @type {CoffeeModel} */
+	this.coffee = null;
+	/** @type {string} */
+	this.text = "";
+}
