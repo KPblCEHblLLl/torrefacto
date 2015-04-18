@@ -18,6 +18,9 @@ function OrderModel() {
 	this._eventsTarget = $(this);
 }
 
+/** @type {boolean} */
+OrderModel.prototype.isGlobal = false;
+
 /** @type {number[]} */
 OrderModel.prototype.weightsList = [
 	150,
@@ -79,6 +82,11 @@ OrderModel.prototype.clearItems = function () {
 	this.itemsList = [];
 	this.saveToStorage();
 	this.fire("items-list-changed", this.itemsList);
+};
+
+/** @returns {OrderItem[]} */
+OrderModel.prototype.getItemsList = function() {
+	return this.itemsList.slice(0);
 };
 
 /**
@@ -205,6 +213,9 @@ OrderModel.prototype._storeSelfOrder = function() {
 
 	for (var i = 0; i < this.itemsList.length; i++) {
 		var item = this.itemsList[i];
+		if (item.quantity == 0) {
+			continue;
+		}
 		data["list"].push({
 			"id": item.coffee.id,
 			"quantity": item.quantity,
@@ -421,9 +432,10 @@ function GlobalOrderModel() {
 	GlobalOrderModel.superclass.apply(this);
 	/** @type {OrderModel} */
 	this.allOrders = [];
+	/** @type {boolean} */
+	this.isGlobal = true;
 }
 extend(GlobalOrderModel, OrderModel);
-
 
 /** @param {OrderModel} order */
 GlobalOrderModel.prototype.addOrder = function(order) {

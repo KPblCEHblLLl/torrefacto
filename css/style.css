@@ -15,6 +15,10 @@
 	background-color: #EC5A5F;
 }
 
+#coffee-table.global .quantity-controll {
+	display: none;
+}
+
 #opinion {
 	padding: 8px;
 	box-sizing: border-box;

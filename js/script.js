@@ -2,14 +2,27 @@
  * Created by d.lubimov on 03.04.2015.
  */
 
+/** @class */
+function PageModes() {
+	/** @type {string} */
+	this.own = "own";
+	/** @type {string} */
+	this.global = "global";
+}
+var modes = new PageModes();
+var mode = modes.own;
+
 /** @type {OrderModel} */
 var order = new OrderModel();
 /** @type {jQuery} */
 var table;
 
 order.on("coffee-list-changed", drawCoffeeTable);
-order.on("items-list-changed", drawCoffeeTable);
 order.on("opinions-list-changed", applyOpinions);
+order.on("items-list-changed", applyQantity);
+order.on("item-changed", function(event, /**OrderItem*/item) {
+	applyQantity(item);
+});
 
 
 $(function () {
@@ -67,6 +80,17 @@ $(function () {
 			showEditOpinion(this);
 		});
 
+	$(".order-switcher").on("click", function() {
+		var btn = $(this);
+		mode = modes.own;
+		if (btn.hasClass("own-order")) {
+			mode = modes.own;
+		}
+		if (btn.hasClass("global-order")) {
+			mode = modes.global;
+		}
+	});
+
 	$.getJSON("./data/coffee.json").done(function (list) {
 		order.applyCoffeeList(list);
 	});
@@ -99,12 +123,33 @@ function drawCoffeeTable() {
 		for (var j = 0; j < order.weightsList.length; j++) {
 			var weight = order.weightsList[j];
 			row.append("<td class='price'>" + coffee.price[weight] + " р.</td>");
-			row.append($("<td></td>").append(createQuantityContent(coffee, weight)));
+			row.append(
+				$("<td class='quantity-holder' data-weight='" + weight + "'></td>")
+					.html(createQuantityContent(coffee, weight))
+			);
 		}
 		tbody.append(row);
 	}
 	setTotal();
+	applyQantity();
 	applyOpinions();
+}
+
+/**
+ * @param {OrderItem|OrderItem[]} [list]
+ */
+function applyQantity(list) {
+	list = list || order.getItemsList();
+	if (!$.isArray(list)) {
+		list = [list];
+	}
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var row = table.find("row_" + item.coffee.id);
+		row.find(".quantity-holder[data-weight='" + item.weight + "']")
+			.html(createQuantityContent(item.coffee, item.weight));
+	}
 }
 
 /**
@@ -120,9 +165,10 @@ function createQuantityContent(coffee, weight, item) {
 	content.attr("coffee-id", coffee.id);
 	content.attr("weight", weight);
 	content.append("<span>" + quantity + "</span>");
-	content.append("<button class='add'>want it!</button>");
+
+	content.append("<button class='quantity-controll add'>want it!</button>");
 	if (quantity > 0) {
-		content.append("<button class='substract'>fck it!</button>");
+		content.append("<button class='quantity-controll substract'>fck it!</button>");
 	}
 
 	content.data("coffee", coffee);
