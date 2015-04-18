@@ -15,6 +15,13 @@ order.on("opinions-list-changed", applyOpinions);
 $(function () {
 	table = $("#coffee-table");
 	order.loadFromStorage();
+
+	$(document).on("keydown", function(/**Event*/event) {
+		if (event.keyCode == 27) {
+			hideEditOpinion();
+		}
+	});
+
 	$("#username")
 		.change(function () {
 			order.setUserName(this.value.trim());
@@ -32,8 +39,16 @@ $(function () {
 	});
 
 	$("#opinion")
+		.on("keydown", ".opinion-input", function(/**Event*/event) {
+			if (event.ctrlKey && event.keyCode == 13) {
+				saveOpinion();
+			}
+			if (event.keyCode == 27) {
+				hideEditOpinion();
+			}
+		})
 		.on("click", ".cancel", function() {
-			$("#opinion").hide();
+			hideEditOpinion();
 		})
 		.on("click", ".save", function() {
 			saveOpinion();
@@ -52,6 +67,9 @@ $(function () {
 
 	$.getJSON("./data/coffee.json").done(function (list) {
 		order.applyCoffeeList(list);
+	});
+	$.getJSON("./data/opinions.json").done(function (list) {
+		order.applyOpinionsList(list);
 	});
 });
 
@@ -164,7 +182,7 @@ function applyOpinions() {
 			if (opinionText) {
 				opinionText += "\n\n";
 			}
-			opinionText += opinion.user + ":\n";
+			opinionText += opinion.username + ":\n";
 			opinionText += opinion.text;
 		}
 
@@ -187,8 +205,28 @@ function showEditOpinion(opinionHolder) {
 	var textarea = popup.find(".opinion-input");
 	textarea.val(text);
 
+	var otherOpinions = order.getOtherOpinions(coffee);
+
+	popup.find(".others").toggleClass("no-others", !otherOpinions.length);
+
+	popup.find(".other-opitions-list").html(
+		otherOpinions.map(function(/**CoffeeOpinion*/opinion) {
+			return "<div class='opinion-block'>" +
+					"<span class='username'>" + opinion.username + ":</span><br/>" +
+					opinion.text.replace(/\n/g, "<br/>") +
+				"</div>";
+		}).join("")
+	);
+
+
 	popup.css("top", row.offset().top);
-	popup.show();
+	popup.show(function() {
+		textarea.focus();
+	});
+}
+
+function hideEditOpinion() {
+	$("#opinion").hide();
 }
 
 function saveOpinion() {
@@ -199,5 +237,5 @@ function saveOpinion() {
 	var text = textarea.val();
 
 	order.saveUserOpinion(coffee, text);
-	popup.hide();
+	hideEditOpinion();
 }

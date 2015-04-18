@@ -62,18 +62,17 @@ OrderModel.prototype.applyCoffeeList = function(list) {
 
 	this.coffeeList = list;
 
-	// появились настоящие объекты кофе, пора прикрутить на них ссылки
-	for (var i = 0; i < this.itemsList.length; ++i) {
-		var item = this.itemsList[i];
-		item.coffee = this.getCoffee(item.id);
-	}
-
-	for (var j = 0; j < this._opinionsList.length; ++j) {
-		var opinion = this._opinionsList[j];
-		opinion.coffee = this.getCoffee(opinion.coffeeId);
-	}
-
 	this.fire("coffee-list-changed", this.coffeeList);
+};
+
+OrderModel.prototype.applyOpinionsList = function(list) {
+	var self = this;
+	for (var i = 0; i < list.length; i++) {
+		var data = list[i];
+		var opinion = this._parseOpinion(data);
+		this._opinionsList.push(opinion);
+	}
+	this.fire("opinions-list-changed", this.coffeeList);
 };
 
 OrderModel.prototype.clearItems = function () {
@@ -158,7 +157,7 @@ OrderModel.prototype._loadSelfOrder = function() {
 	for (var i = 0; i < list.length; i++) {
 		var itemData = list[i];
 		var item = new OrderItem();
-		item.coffee = this.getPromissedCoffee(item.id);
+		item.coffee = this.promiseCoffee(item.id);
 		item.quantity = itemData["quantity"];
 		item.weight = itemData["weight"];
 		this.itemsList.push(item);
@@ -171,16 +170,25 @@ OrderModel.prototype._loadOpinions = function() {
 		return;
 	}
 
-	var data = JSON.parse(dataStr);
-	for (var j = 0; j < data.length; ++j) {
-		var opinionData = data[j];
-		var opinion = new CoffeeOpinion();
-		opinion.text = opinionData["text"];
-		opinion.coffee = this.getPromissedCoffee(opinion.coffeeId);
-		opinion.user = opinionData["user"];
+	var list = JSON.parse(dataStr);
+	for (var i = 0; i < list.length; ++i) {
+		var data = list[i];
+		var opinion = this._parseOpinion(data);
 		this._opinionsList.push(opinion);
 	}
+};
 
+/**
+ * @param {object} data
+ * @returns {CoffeeOpinion}
+ * @private
+ */
+OrderModel.prototype._parseOpinion = function(data) {
+	var opinion = new CoffeeOpinion();
+	opinion.text = data["text"];
+	opinion.coffee = this.promiseCoffee(data["coffeeId"]);
+	opinion.username = data["username"];
+	return opinion;
 };
 
 OrderModel.prototype.saveToStorage = function() {
@@ -202,7 +210,7 @@ OrderModel.prototype.saveToStorage = function() {
 
 	var opinionsData = this.getAllUserOpinions().map(function(/**CoffeeOpinion*/opinion) {
 		return {
-			"user": opinion.user,
+			"username": opinion.username,
 			"coffeeId": opinion.coffee.id,
 			"text": opinion.text,
 		};
@@ -286,7 +294,7 @@ OrderModel.prototype.getRequestData = function() {
 OrderModel.prototype.getAllUserOpinions = function(username) {
 	username = username || this.username;
 	var list = this._opinionsList.filter(function(/**CoffeeOpinion*/opinion) {
-		return opinion.user == username;
+		return opinion.username == username;
 	});
 	return list;
 };
@@ -334,12 +342,29 @@ OrderModel.prototype.getUserOpinion = function(coffee, username) {
 	var opinionsList = this._getOpinionsByCoffee(coffee);
 	for (var i = 0; i < opinionsList.length; ++i) {
 		var opinion = opinionsList[i];
-		if (opinion.user == username) {
+		if (opinion.username == username) {
 			return opinion;
 		}
 	}
 
 	return null;
+};
+
+/**
+ * @param {CoffeeModel} coffee
+ * @returns {CoffeeOpinion[]}
+ */
+OrderModel.prototype.getOtherOpinions = function(coffee) {
+	var currentUser = this.username;
+	var list = [];
+	var opinionsList = this._getOpinionsByCoffee(coffee);
+	for (var i = 0; i < opinionsList.length; ++i) {
+		var opinion = opinionsList[i];
+		if (opinion.username != currentUser) {
+			list.push(opinion);
+		}
+	}
+	return list;
 };
 
 /**
@@ -356,7 +381,7 @@ OrderModel.prototype.saveUserOpinion = function(coffee, text, username) {
 		if (!opinion) {
 			opinion = new CoffeeOpinion();
 			opinion.coffee = coffee;
-			opinion.user = username;
+			opinion.username = username;
 			this._opinionsList.push(opinion);
 		}
 		opinion.text = text;
@@ -447,7 +472,7 @@ OrderItem.prototype.clone = function() {
 /** @class */
 function CoffeeOpinion() {
 	/** @type {string} */
-	this.user = "";
+	this.username = "";
 	/** @type {CoffeeModel} */
 	this.coffee = null;
 	/** @type {string} */
