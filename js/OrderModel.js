@@ -157,7 +157,7 @@ OrderModel.prototype._loadSelfOrder = function() {
 	for (var i = 0; i < list.length; i++) {
 		var itemData = list[i];
 		var item = new OrderItem();
-		item.coffee = this.promiseCoffee(item.id);
+		item.coffee = this.promiseCoffee(itemData["id"]);
 		item.quantity = itemData["quantity"];
 		item.weight = itemData["weight"];
 		this.itemsList.push(item);
@@ -192,6 +192,13 @@ OrderModel.prototype._parseOpinion = function(data) {
 };
 
 OrderModel.prototype.saveToStorage = function() {
+	localStorage.setItem("username", this.username);
+
+	this._storeSelfOrder();
+	this._storeSelfOpinions();
+};
+
+OrderModel.prototype._storeSelfOrder = function() {
 	var data = {};
 	data["username"] = this.username;
 	data["list"] = [];
@@ -199,15 +206,16 @@ OrderModel.prototype.saveToStorage = function() {
 	for (var i = 0; i < this.itemsList.length; i++) {
 		var item = this.itemsList[i];
 		data["list"].push({
-			"id": item.id,
+			"id": item.coffee.id,
 			"quantity": item.quantity,
 			"weight": item.weight,
 		});
 	}
 
 	localStorage.setItem("order", JSON.stringify(data));
+};
 
-
+OrderModel.prototype._storeSelfOpinions = function() {
 	var opinionsData = this.getAllUserOpinions().map(function(/**CoffeeOpinion*/opinion) {
 		return {
 			"username": opinion.username,

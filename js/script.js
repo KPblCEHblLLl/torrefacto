@@ -29,7 +29,9 @@ $(function () {
 		.val(order.username);
 
 	$("#reset").click(function() {
-		order.clearItems();
+		if (confirm("очистить заказ?")) {
+			order.clearItems();
+		}
 	});
 
 	$("#submit-order").click(function() {
