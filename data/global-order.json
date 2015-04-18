@@ -2,9 +2,9 @@
 	"id": "someid",
 	"date": "2015-04-05",
 	"ordersList": [
-		{"username":"Любимов","list":[{"id":"bx_2587744191_21692","quantity":1,"weight":150},{"id":"bx_2587744191_21692","quantity":1,"weight":450},{"id":"bx_2587744191_18686","quantity":1,"weight":150}]},
-		{"username":"Исаев","list":[{"id":"bx_2587744191_23217","quantity":1,"weight":150},{"id":"bx_2587744191_21686","quantity":1,"weight":450}]},
-		{"username":"Топопркова","list":[{"id":"bx_2587744191_23217","quantity":1,"weight":150},{"id":"bx_2587744191_21686","quantity":0,"weight":450},{"id":"bx_2587744191_18686","quantity":1,"weight":450},{"id":"bx_2587744191_18699","quantity":1,"weight":450}]}
+		{"username":"Р›СЋР±РёРјРѕРІ","list":[{"id":"bx_2587744191_21692","quantity":1,"weight":150},{"id":"bx_2587744191_21692","quantity":1,"weight":450},{"id":"bx_2587744191_18686","quantity":1,"weight":150}]},
+		{"username":"РСЃР°РµРІ","list":[{"id":"bx_2587744191_23217","quantity":1,"weight":150},{"id":"bx_2587744191_21686","quantity":1,"weight":450}]},
+		{"username":"РўРѕРїРѕРїСЂРєРѕРІР°","list":[{"id":"bx_2587744191_23217","quantity":1,"weight":150},{"id":"bx_2587744191_21686","quantity":0,"weight":450},{"id":"bx_2587744191_18686","quantity":1,"weight":450},{"id":"bx_2587744191_18699","quantity":1,"weight":450}]}
 	]
 }
 

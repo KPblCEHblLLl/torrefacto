@@ -40,6 +40,7 @@ OrderModel.prototype.setUserName = function(username) {
 };
 
 OrderModel.prototype.applyCoffeeList = function(list) {
+	var self = this;
 	list = $.map(list, function(coffeeData) {
 		var id = coffeeData["id"];
 		var coffee = self.getPromissedCoffee(id);
