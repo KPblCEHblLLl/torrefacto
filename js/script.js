@@ -142,7 +142,7 @@ function redrawQuantity(item) {
 	if (!item) {
 		return;
 	}
-	var quantity = table.find(".quantity[coffee-id='" + item.id + "'][weight='" + item.weight + "']");
+	var quantity = table.find(".quantity[coffee-id='" + item.coffee.id + "'][weight='" + item.weight + "']");
 	quantity.replaceWith(createQuantityContent(item.coffee, item.weight));
 	setTotal();
 }

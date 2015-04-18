@@ -10,6 +10,8 @@ function OrderModel() {
 	this.itemsList = [];
 	/** @type {CoffeeModel[]} */
 	this.coffeeList = [];
+	/** @type {CoffeeModel[]} */
+	this._promisedCoffeeList = [];
 	/** @type {CoffeeOpinion[]} */
 	this._opinionsList = [];
 
@@ -39,7 +41,9 @@ OrderModel.prototype.setUserName = function(username) {
 
 OrderModel.prototype.applyCoffeeList = function(list) {
 	list = $.map(list, function(coffeeData) {
-		var coffee = new CoffeeModel();
+		var id = coffeeData["id"];
+		var coffee = self.getPromissedCoffee(id);
+		coffee = coffee || new CoffeeModel();
 		coffee.id = coffeeData["id"];
 		coffee.name = coffeeData["name"];
 		coffee.subName = coffeeData["subName"];
@@ -57,7 +61,7 @@ OrderModel.prototype.applyCoffeeList = function(list) {
 
 	this.coffeeList = list;
 
-	// появились настоящие объекты кофе, пора прикрутить на них ссылки
+	// РїРѕСЏРІРёР»РёСЃСЊ РЅР°СЃС‚РѕСЏС‰РёРµ РѕР±СЉРµРєС‚С‹ РєРѕС„Рµ, РїРѕСЂР° РїСЂРёРєСЂСѓС‚РёС‚СЊ РЅР° РЅРёС… СЃСЃС‹Р»РєРё
 	for (var i = 0; i < this.itemsList.length; ++i) {
 		var item = this.itemsList[i];
 		item.coffee = this.getCoffee(item.id);
@@ -104,7 +108,6 @@ OrderModel.prototype.addQuantity = function(coffee, weight) {
 	if (!currentItem) {
 		currentItem = new OrderItem();
 		currentItem.coffee = coffee;
-		currentItem.id = coffee.id;
 		currentItem.weight = weight;
 		this.itemsList.push(currentItem);
 	}
@@ -134,6 +137,14 @@ OrderModel.prototype.substractQuantity = function(coffee, weight) {
 
 OrderModel.prototype.loadFromStorage = function() {
 	this.username = localStorage.getItem("username");
+
+	this._loadSelfOrder();
+	this._loadOpinions();
+
+	this.fire("load");
+};
+
+OrderModel.prototype._loadSelfOrder = function() {
 	var dataStr = localStorage.getItem("order");
 	if (!dataStr) {
 		return;
@@ -146,26 +157,29 @@ OrderModel.prototype.loadFromStorage = function() {
 	for (var i = 0; i < list.length; i++) {
 		var itemData = list[i];
 		var item = new OrderItem();
-		item.id = itemData["id"];
-		item.coffee = this.getCoffee(item.id);
+		item.coffee = this.getPromissedCoffee(item.id);
 		item.quantity = itemData["quantity"];
 		item.weight = itemData["weight"];
 		this.itemsList.push(item);
 	}
+};
 
-	var opinionsDataStr = localStorage.getItem("opinions") || "[]";
-	var opinionsData = JSON.parse(opinionsDataStr);
-	for (var j = 0; j < opinionsData.length; ++j) {
-		var opinionData = opinionsData[j];
+OrderModel.prototype._loadOpinions = function() {
+	var dataStr = localStorage.getItem("opinions");
+	if (!dataStr) {
+		return;
+	}
+
+	var data = JSON.parse(dataStr);
+	for (var j = 0; j < data.length; ++j) {
+		var opinionData = data[j];
 		var opinion = new CoffeeOpinion();
 		opinion.text = opinionData["text"];
-		opinion.coffeeId = opinionData["coffeeId"];
-		opinion.coffee = this.getCoffee(opinion.coffeeId);
+		opinion.coffee = this.getPromissedCoffee(opinion.coffeeId);
 		opinion.user = opinionData["user"];
 		this._opinionsList.push(opinion);
 	}
 
-	this.fire("load");
 };
 
 OrderModel.prototype.saveToStorage = function() {
@@ -226,6 +240,36 @@ OrderModel.prototype.getCoffee = function(id) {
 	}
 
 	return null;
+};
+
+/**
+ * @param {string} id
+ * @returns {CoffeeModel}
+ */
+OrderModel.prototype.getPromissedCoffee = function(id) {
+	for (var i = 0; i < this._promisedCoffeeList.length; i++) {
+		var coffee = this._promisedCoffeeList[i];
+		if (coffee.id == id) {
+			return coffee;
+		}
+	}
+
+	return null;
+};
+
+/**
+ * @param {string} [id]
+ * @returns {CoffeeModel}
+ */
+OrderModel.prototype.promiseCoffee = function(id) {
+	var coffee = this.getCoffee(id);
+	if (!coffee) {
+		coffee = new CoffeeModel();
+		coffee.id = id;
+		this._promisedCoffeeList.push(coffee);
+	}
+
+	return coffee;
 };
 
 /** @returns {Object} */
@@ -383,8 +427,6 @@ function CoffeeModel() {
 function OrderItem() {
 	/** @type {CoffeeModel} */
 	this.coffee = null;
-	/** @type {string} */
-	this.id = "";
 	/** @type {number} */
 	this.weight = "";
 	/** @type {number} */
@@ -395,7 +437,6 @@ function OrderItem() {
 OrderItem.prototype.clone = function() {
 	var clone = new OrderItem();
 	clone.coffee = this.coffee;
-	clone.id = this.id;
 	clone.quantity = this.quantity;
 	clone.weight = this.weight;
 
@@ -406,8 +447,6 @@ OrderItem.prototype.clone = function() {
 function CoffeeOpinion() {
 	/** @type {string} */
 	this.user = "";
-	/** @type {string} */
-	this.coffeeId = "";
 	/** @type {CoffeeModel} */
 	this.coffee = null;
 	/** @type {string} */
